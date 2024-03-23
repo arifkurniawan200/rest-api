@@ -1,9 +1,9 @@
 db:
   host: localhost
-  port: 3306
-  name: kredit_system
-  username: admin
-  password: Password123#@!
+  port: 5432
+  name: data_server
+  username: smartm2m
+  password: postgres
   active_pool: true
   max_pool: 30
   min_pool: 5

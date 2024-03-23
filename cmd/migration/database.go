@@ -39,7 +39,7 @@ func RunMigration(cfg config.Config) {
 		arguments = append(arguments, args[3:]...)
 	}
 
-	if err := goose.SetDialect("mysql"); err != nil {
+	if err := goose.SetDialect("postgres"); err != nil {
 		log.Fatalf("Failed to set dialect: %v", err)
 	}
 	dbSrc, err := driver.NewDatabase(cfg.DB)
