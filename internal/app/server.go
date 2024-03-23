@@ -1,11 +1,14 @@
 package app
 
 import (
-	"fmt"
+	"context"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"log"
 	"net/http"
-	"sync"
+	"os"
+	"os/signal"
+	"syscall"
 	"template/internal/usecase"
 	"time"
 )
@@ -65,16 +68,32 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
 		admin.Use(AdminMiddleware)
 	}
 
-	var wg sync.WaitGroup
+	stop := make(chan os.Signal, 1)
 
-	wg.Add(1)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+
 	go func() {
-		defer wg.Done()
 
-		if err := e.Start(":8080"); err != nil {
-			fmt.Printf("Error starting server: %v\n", err)
+		if err := e.Start(":8080"); err != nil && err != http.ErrServerClosed {
+			log.Printf("Error starting server: %v\n", err)
+			os.Exit(1)
 		}
 	}()
 
-	wg.Wait()
+	<-stop
+
+	log.Println("OS SIGNAL RECEIVED")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 40*time.Second)
+
+	defer cancel()
+
+	log.Println("SHUTTING DOWN SERVER...")
+
+	if err := e.Shutdown(ctx); err != nil {
+		log.Printf("ERR SHUTTING DOWN SERVER : %v\n", err)
+		os.Exit(1)
+	}
+
+	log.Println("SERVER GRACEFULLY STOPPED")
 }
