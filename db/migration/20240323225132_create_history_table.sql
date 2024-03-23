@@ -13,5 +13,5 @@ CREATE TABLE IF NOT EXISTS table_history (
 
 -- +goose Down
 -- +goose StatementBegin
-SELECT 'down SQL query';
+DROP TABLE IF EXISTS table_history;
 -- +goose StatementEnd
