@@ -1,14 +1,14 @@
 package items
 
 const (
-	getListItem = `SELECT id, name, rating, category, image_url, reputation, price, availability, value
-FROM items `
+	getListItem = `SELECT id, name, rating, category, image_url, reputation, price, availability, value,is_active
+FROM items where is_active=true`
 
-	getMyItems = `SELECT id, name, rating, category, image_url, reputation, price, availability,value
+	getMyItems = `SELECT id, name, rating, category, image_url, reputation, price, availability,value,is_active
 FROM items where created_by = $1`
 
-	geItemByID = `SELECT id, name, rating, category, image_url, reputation, price, availability,value
-FROM items where id = $1`
+	geItemByID = `SELECT id, name, rating, category, image_url, reputation, price, availability,value,is_active
+FROM items where id = $1 and is_active = true`
 
 	insertNewItem = `INSERT INTO items (name, rating, category, image_url, reputation, price, availability, value)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`

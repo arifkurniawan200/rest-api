@@ -10,6 +10,7 @@ type Item struct {
 	Price          int         `json:"price" db:"price"`
 	Availability   int         `json:"availability" db:"availability"`
 	Value          string      `json:"value" db:"value"`
+	IsActive       bool        `json:"is_active" db:"is_active"`
 	HistoryChanges interface{} `json:"history_changes,omitempty"`
 }
 

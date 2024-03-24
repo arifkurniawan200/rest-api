@@ -74,7 +74,7 @@ func (i ItemsHandler) GetItemByID(ctx echo.Context, itemID int64, tx *sql.Tx) (m
 	defer rows.Close()
 
 	for rows.Next() {
-		if err := rows.Scan(&data.ID, &data.Name, &data.Rating, &data.Category, &data.ImageURL, &data.Reputation, &data.Price, &data.Availability, &data.Value); err != nil {
+		if err := rows.Scan(&data.ID, &data.Name, &data.Rating, &data.Category, &data.ImageURL, &data.Reputation, &data.Price, &data.Availability, &data.Value, &data.IsActive); err != nil {
 			return data, err
 		}
 	}
@@ -99,7 +99,7 @@ func (i ItemsHandler) GetMyItem(ctx echo.Context, userID int64) ([]model.Item, e
 
 	for rows.Next() {
 		var t model.Item
-		if err := rows.Scan(&t.ID, &t.Name, &t.Rating, &t.Category, &t.ImageURL, &t.Reputation, &t.Price, &t.Availability, &t.Value); err != nil {
+		if err := rows.Scan(&t.ID, &t.Name, &t.Rating, &t.Category, &t.ImageURL, &t.Reputation, &t.Price, &t.Availability, &t.Value, &t.IsActive); err != nil {
 			return nil, err
 		}
 		data = append(data, t)
@@ -166,7 +166,7 @@ func (i ItemsHandler) GetListPublicItem(ctx echo.Context, param model.Search) ([
 
 	for rows.Next() {
 		var t model.Item
-		if err := rows.Scan(&t.ID, &t.Name, &t.Rating, &t.Category, &t.ImageURL, &t.Reputation, &t.Price, &t.Availability, &t.Value); err != nil {
+		if err := rows.Scan(&t.ID, &t.Name, &t.Rating, &t.Category, &t.ImageURL, &t.Reputation, &t.Price, &t.Availability, &t.Value, &t.IsActive); err != nil {
 			return nil, err
 		}
 		data = append(data, t)

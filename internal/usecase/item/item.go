@@ -104,8 +104,9 @@ func (i ItemHandler) GetItemByItemID(ctx echo.Context, itemID int64) (model.Item
 
 	wg.Wait()
 
-	item.HistoryChanges = histories
-
+	if item.IsActive {
+		item.HistoryChanges = histories
+	}
 	return item, nil
 }
 
