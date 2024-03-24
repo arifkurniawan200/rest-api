@@ -16,8 +16,13 @@ type Database struct {
 	MinPool    int    `yaml:"min_pool"`
 }
 
+type Environment struct {
+	SecretKey string `json:"secret_key"`
+}
+
 type Config struct {
-	DB Database `yaml:"db"`
+	DB  Database    `yaml:"db"`
+	Env Environment `yaml:"env"`
 }
 
 func ReadConfig() Config {

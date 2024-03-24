@@ -7,3 +7,6 @@ db:
   active_pool: true
   max_pool: 30
   min_pool: 5
+
+env:
+  secret_key: UoBOUBxUy__PGyS9

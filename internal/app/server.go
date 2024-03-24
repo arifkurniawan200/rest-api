@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"template/config"
 	"template/internal/usecase"
 	"time"
 )
@@ -26,6 +27,8 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
 		Transaction: t,
 	}
 
+	cfg := config.ReadConfig()
+
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
@@ -38,7 +41,7 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
 	}))
 
 	// Rate Limiter Configuration
-	config := middleware.RateLimiterConfig{
+	rateLimiterConfig := middleware.RateLimiterConfig{
 		Skipper: middleware.DefaultSkipper,
 		Store: middleware.NewRateLimiterMemoryStoreWithConfig(
 			middleware.RateLimiterMemoryStoreConfig{Rate: 10, Burst: 30, ExpiresIn: 3 * time.Minute},
@@ -54,17 +57,26 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
 			return context.JSON(http.StatusTooManyRequests, nil)
 		},
 	}
-	e.Use(middleware.RateLimiterWithConfig(config))
+
+	e.Use(middleware.RateLimiterWithConfig(rateLimiterConfig))
 	e.POST("/register", h.RegisterUser)
 	e.POST("/login", h.LoginUser)
 
-	customer := e.Group("/customer")
+	v1 := e.Group("/v1")
+
+	user := v1.Group("/user")
 	{
-		customer.Use(JWTMiddleware("secret")) // still default,can change anytime (i suggest i should placed in  .env)
+		user.Use(JWTMiddleware(cfg.Env.SecretKey))
 	}
+
+	item := v1.Group("/items")
+	{
+		item.Use(JWTMiddleware(cfg.Env.SecretKey))
+	}
+
 	admin := e.Group("/admin")
 	{
-		admin.Use(JWTMiddleware("secret")) // still default,can change anytime (i suggest i should placed in  .env)
+		admin.Use(JWTMiddleware(cfg.Env.SecretKey))
 		admin.Use(AdminMiddleware)
 	}
 
