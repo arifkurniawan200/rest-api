@@ -15,6 +15,30 @@ type ItemsHandler struct {
 	db *sql.DB
 }
 
+func (i ItemsHandler) UpdateItem(ctx echo.Context, item model.RequestCreateItem, tx *sql.Tx) error {
+	var (
+		err error
+	)
+
+	ctxWithTimeout, cancel := context.WithTimeout(ctx.Request().Context(), 5*time.Second)
+	defer cancel()
+
+	// check if using transaction
+	if tx != nil {
+		_, err = tx.ExecContext(ctxWithTimeout, updateItembyID, item.Name, item.Rating, item.Category, item.ImageURL, item.Reputation, item.Price, item.Availability, item.Value, item.ID)
+		if err != nil {
+			return err
+		}
+	} else {
+		// using existing database from dependencies injection
+		_, err = i.db.ExecContext(ctxWithTimeout, geItemByID, item.Name, item.Rating, item.Category, item.ImageURL, item.Reputation, item.Price, item.Availability, item.Value, item.ID)
+		if err != nil {
+			return err
+		}
+	}
+	return err
+}
+
 func (i ItemsHandler) CreateItem(ctx echo.Context, item model.RequestCreateItem) error {
 	_, err := i.db.Exec(insertNewItem, item.Name, item.Rating, item.Category, item.ImageURL, item.Reputation, item.Price, item.Availability, item.Value)
 	if err != nil {
@@ -23,16 +47,30 @@ func (i ItemsHandler) CreateItem(ctx echo.Context, item model.RequestCreateItem)
 	return err
 }
 
-func (i ItemsHandler) GetItemByID(ctx echo.Context, itemID int64) (model.Item, error) {
-	var data model.Item
+func (i ItemsHandler) GetItemByID(ctx echo.Context, itemID int64, tx *sql.Tx) (model.Item, error) {
+	var (
+		data model.Item
+		rows *sql.Rows
+		err  error
+	)
 
 	ctxWithTimeout, cancel := context.WithTimeout(ctx.Request().Context(), 5*time.Second)
 	defer cancel()
 
-	rows, err := i.db.QueryContext(ctxWithTimeout, geItemByID, itemID)
-	if err != nil {
-		return data, err
+	// check if using transaction
+	if tx != nil {
+		rows, err = tx.QueryContext(ctxWithTimeout, geItemByID, itemID)
+		if err != nil {
+			return data, err
+		}
+	} else {
+		// using existing database from dependencies injection
+		rows, err = i.db.QueryContext(ctxWithTimeout, geItemByID, itemID)
+		if err != nil {
+			return data, err
+		}
 	}
+
 	defer rows.Close()
 
 	for rows.Next() {

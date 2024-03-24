@@ -22,6 +22,18 @@ type RequestCreateItem struct {
 	Availability int    `json:"availability"  validate:"required"`
 	UserID       int64  `json:"-"`
 	Value        string `json:"-"`
+	ID           int    `json:"-"`
+}
+
+func (i *RequestCreateItem) GetReputationBadge() {
+	switch {
+	case i.Reputation <= 500:
+		i.Value = "red"
+	case i.Reputation <= 799:
+		i.Value = "yellow"
+	default:
+		i.Value = "green"
+	}
 }
 
 type Search struct {
