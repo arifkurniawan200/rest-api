@@ -3,6 +3,8 @@ package items
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"template/internal/model"
 	"template/internal/repository"
@@ -12,6 +14,44 @@ import (
 
 type historyHandler struct {
 	db *sql.DB
+}
+
+func (h historyHandler) GetHistory(ctx echo.Context, itemID int64) ([]model.TableHistory, error) {
+	var data []model.TableHistory
+
+	ctxWithTimeout, cancel := context.WithTimeout(ctx.Request().Context(), 5*time.Second)
+	defer cancel()
+
+	rows, err := h.db.QueryContext(ctxWithTimeout, getHistoryChanges, "items", itemID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var t model.TableHistory
+		var dataBefore string
+		var dataAfter string
+		if err := rows.Scan(&t.ID, &t.TableName, &t.TableKey, &dataBefore, &dataAfter, &t.UserID, &t.CreatedAt); err != nil {
+			return nil, err
+		}
+		err = json.Unmarshal([]byte(dataBefore), &t.DataBefore)
+		if err != nil {
+			fmt.Println(err)
+			return nil, fmt.Errorf("Error unmarshalling JSON:", err)
+		}
+		err = json.Unmarshal([]byte(dataAfter), &t.DataAfter)
+		if err != nil {
+			return nil, fmt.Errorf("Error unmarshalling JSON:", err)
+		}
+
+		data = append(data, t)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 func (h historyHandler) SaveHistory(ctx echo.Context, history model.TableHistory, tx *sql.Tx) error {

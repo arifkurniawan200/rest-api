@@ -3,6 +3,7 @@ package item
 import (
 	"fmt"
 	"github.com/labstack/echo/v4"
+	"sync"
 	"template/internal/model"
 	"template/internal/repository"
 	"template/internal/usecase"
@@ -74,7 +75,38 @@ func (i ItemHandler) AddItem(ctx echo.Context, item model.RequestCreateItem) err
 }
 
 func (i ItemHandler) GetItemByItemID(ctx echo.Context, itemID int64) (model.Item, error) {
-	return i.i.GetItemByID(ctx, itemID, nil)
+	var (
+		wg        sync.WaitGroup
+		item      model.Item
+		err       error
+		histories []model.TableHistory
+	)
+
+	wg.Add(2)
+
+	go func() error {
+		defer wg.Done()
+		item, err = i.i.GetItemByID(ctx, itemID, nil)
+		if err != nil {
+			return nil
+		}
+		return nil
+	}()
+
+	go func() error {
+		defer wg.Done()
+		histories, err = i.h.GetHistory(ctx, itemID)
+		if err != nil {
+			return err
+		}
+		return nil
+	}()
+
+	wg.Wait()
+
+	item.HistoryChanges = histories
+
+	return item, nil
 }
 
 func (i ItemHandler) GetMyItem(ctx echo.Context, userID int64) ([]model.Item, error) {

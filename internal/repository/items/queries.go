@@ -29,7 +29,10 @@ WHERE id = $9;
 	saveHistoryChanges = `
 INSERT INTO table_history (table_name, table_key, data_before, data_after, user_id, created_at)
 VALUES ($1, $2, $3, $4, $5, $6);
+`
 
-
+	getHistoryChanges = `
+	SELECT id, table_name, table_key, data_before, data_after, user_id, created_at
+FROM table_history WHERE table_name = $1 AND table_key = $2;
 `
 )

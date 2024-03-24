@@ -25,4 +25,5 @@ type ItemRepository interface {
 
 type HistoryRepository interface {
 	SaveHistory(ctx echo.Context, history model.TableHistory, tx *sql.Tx) error
+	GetHistory(ctx echo.Context, itemID int64) ([]model.TableHistory, error)
 }
