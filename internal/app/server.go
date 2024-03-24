@@ -19,6 +19,8 @@ type handler struct {
 	Transaction usecase.TransactionUcase
 }
 
+var cv = NewCustomValidator()
+
 func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
 	e := echo.New()
 
@@ -58,11 +60,12 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
 		},
 	}
 
-	e.Use(middleware.RateLimiterWithConfig(rateLimiterConfig))
-	e.POST("/register", h.RegisterUser)
-	e.POST("/login", h.LoginUser)
-
 	v1 := e.Group("/v1")
+	v1.Use(middleware.RateLimiterWithConfig(rateLimiterConfig))
+	v1.POST("/register", h.RegisterUser)
+	v1.POST("/login", h.LoginUser)
+
+	// set versioning v1
 
 	user := v1.Group("/user")
 	{
@@ -74,7 +77,7 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
 		item.Use(JWTMiddleware(cfg.Env.SecretKey))
 	}
 
-	admin := e.Group("/admin")
+	admin := v1.Group("/admin")
 	{
 		admin.Use(JWTMiddleware(cfg.Env.SecretKey))
 		admin.Use(AdminMiddleware)
