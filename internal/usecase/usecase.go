@@ -6,9 +6,14 @@ import (
 )
 
 type UserUcase interface {
-	RegisterCustomer(ctx echo.Context, customer model.UserParam) error
+	RegisterCustomer(ctx echo.Context, customer model.RequestRegisterUser) error
 	GetUserInfoByEmail(ctx echo.Context, email string) (model.User, error)
 }
 
 type TransactionUcase interface {
+}
+
+type ItemUcase interface {
+	GetMarketItem(ctx echo.Context) ([]model.Item, error)
+	GetMyItem(ctx echo.Context, userID int64) ([]model.Item, error)
 }

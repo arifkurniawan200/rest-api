@@ -1,23 +1,16 @@
 package repository
 
 const (
-	insertNewCostumer  = `INSERT INTO users(NIK, full_name, born_place, born_date,is_admin, email, password) VALUES (?, ?, ?, ?, ?, ?, ?)`
-	getCostumerByEmail = `
-        SELECT
-            id,
-            NIK,
-            full_name,
-            born_place,
-            born_date,
-            is_admin,
-            email,
-            password,
-            created_at,
-            updated_at,
-            deleted_at
-        FROM
-            users
-        WHERE
-            email = ?
-    `
+	insertNewCostumer  = `INSERT INTO users(first_name,last_name,email, password) VALUES ($1, $2, $3, $4)`
+	getCostumerByEmail = `SELECT id, first_name, last_name, email, password, type, created_at, updated_at, deleted_at
+			  FROM users
+			  WHERE email = $1`
+)
+
+const (
+	getListItem = `SELECT id, name, rating, category, image_url, reputation, price, availability
+FROM items `
+
+	getMyItems = `SELECT id, name, rating, category, image_url, reputation, price, availability
+FROM items where created_by = $1`
 )
