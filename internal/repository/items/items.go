@@ -1,15 +1,40 @@
-package repository
+package items
 
 import (
 	"context"
 	"database/sql"
 	"github.com/labstack/echo/v4"
 	"template/internal/model"
+	"template/internal/repository"
 	"time"
 )
 
 type ItemsHandler struct {
 	db *sql.DB
+}
+
+func (i ItemsHandler) GetItemByID(ctx echo.Context, itemID int64) (model.Item, error) {
+	var data model.Item
+
+	ctxWithTimeout, cancel := context.WithTimeout(ctx.Request().Context(), 5*time.Second)
+	defer cancel()
+
+	rows, err := i.db.QueryContext(ctxWithTimeout, geItemByID, itemID)
+	if err != nil {
+		return data, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		if err := rows.Scan(&data.ID, &data.Name, &data.Rating, &data.Category, &data.ImageURL, &data.Reputation, &data.Price, &data.Availability); err != nil {
+			return data, err
+		}
+	}
+
+	if err := rows.Err(); err != nil {
+		return data, err
+	}
+	return data, nil
 }
 
 func (i ItemsHandler) GetMyItem(ctx echo.Context, userID int64) ([]model.Item, error) {
@@ -64,6 +89,6 @@ func (i ItemsHandler) GetListPublicItem(ctx echo.Context) ([]model.Item, error) 
 	return data, nil
 }
 
-func NewItemRepository(db *sql.DB) ItemRepository {
+func NewItemRepository(db *sql.DB) repository.ItemRepository {
 	return &ItemsHandler{db}
 }

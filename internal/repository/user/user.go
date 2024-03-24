@@ -1,16 +1,17 @@
-package repository
+package user
 
 import (
 	"context"
 	"database/sql"
 	"template/internal/model"
+	"template/internal/repository"
 )
 
 type UserHandler struct {
 	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB) UserRepository {
+func NewUserRepository(db *sql.DB) repository.UserRepository {
 	return &UserHandler{db}
 }
 
