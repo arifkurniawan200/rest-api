@@ -1,8 +1,10 @@
 package app
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"strconv"
 	"template/internal/utils"
 )
 
@@ -50,6 +52,31 @@ func (u handler) ListMyItems(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, ResponseSuccess{
 		Messages: "success fetch my item list",
+		Data:     data,
+	})
+}
+
+func (u handler) GetItemsByID(c echo.Context) error {
+	id := c.QueryParam("id")
+	itemID, _ := strconv.Atoi(id)
+	data, err := u.Items.GetItemByItemID(c, int64(itemID))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ResponseFailed{
+			Status:   http.StatusInternalServerError,
+			Messages: "failed to get item",
+			Error:    err.Error(),
+		})
+	}
+
+	if data.ID == 0 {
+		return c.JSON(http.StatusNotFound, ResponseFailed{
+			Status:   http.StatusNotFound,
+			Messages: "not found item",
+			Error:    fmt.Errorf("not found item with id %v", itemID),
+		})
+	}
+	return c.JSON(http.StatusOK, ResponseSuccess{
+		Messages: "success fetch item",
 		Data:     data,
 	})
 }

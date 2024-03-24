@@ -7,8 +7,12 @@ import (
 	"template/config"
 	"template/db"
 	"template/internal/app"
-	"template/internal/repository"
-	"template/internal/usecase"
+	"template/internal/repository/items"
+	"template/internal/repository/transaction"
+	"template/internal/repository/user"
+	"template/internal/usecase/item"
+	transaction_ucase "template/internal/usecase/transaction"
+	user_ucase "template/internal/usecase/user"
 )
 
 func Start() {
@@ -34,13 +38,13 @@ func Start() {
 					log.Fatal(err)
 				}
 
-				userRepo := repository.NewUserRepository(dbs)
-				transactionRepo := repository.NewTransactionRepository(dbs)
-				userUsecase := usecase.NewUserUsecase(userRepo, transactionRepo)
-				transactionUcase := usecase.NewTransactionsUsecase(transactionRepo, userRepo)
-				historyRepo := repository.NewHistoryRepository(dbs)
-				itemRepository := repository.NewItemRepository(dbs)
-				itemUsecase := usecase.NewItemUsecase(transactionRepo, userRepo, historyRepo, itemRepository)
+				userRepo := user.NewUserRepository(dbs)
+				transactionRepo := transaction.NewTransactionRepository(dbs)
+				userUsecase := user_ucase.NewUserUsecase(userRepo, transactionRepo)
+				transactionUcase := transaction_ucase.NewTransactionsUsecase(transactionRepo, userRepo)
+				historyRepo := items.NewHistoryRepository(dbs)
+				itemRepository := items.NewItemRepository(dbs)
+				itemUsecase := item.NewItemUsecase(transactionRepo, userRepo, historyRepo, itemRepository)
 				app.Run(userUsecase, transactionUcase, itemUsecase)
 			},
 		},
