@@ -10,7 +10,29 @@ import (
 )
 
 func (u handler) ListItems(c echo.Context) error {
-	data, err := u.Items.GetMarketItem(c)
+	var (
+		item = new(model.Search)
+		err  error
+	)
+
+	if err := c.Bind(item); err != nil {
+		return c.JSON(http.StatusInternalServerError, ResponseFailed{
+			Status:   http.StatusInternalServerError,
+			Messages: "failed to register user",
+			Error:    err.Error(),
+		})
+	}
+
+	if err = cv.Validate(c, item); err != nil {
+		errorResponse := ResponseFailed{
+			Messages: "Validation Error",
+			Status:   http.StatusBadRequest,
+			Error:    _FormatValidationError(err),
+		}
+		return c.JSON(http.StatusBadRequest, errorResponse)
+	}
+
+	data, err := u.Items.GetMarketItem(c, *item)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ResponseFailed{
 			Status:   http.StatusInternalServerError,

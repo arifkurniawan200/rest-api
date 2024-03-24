@@ -16,7 +16,7 @@ type TransactionRepository interface {
 }
 
 type ItemRepository interface {
-	GetListPublicItem(ctx echo.Context) ([]model.Item, error)
+	GetListPublicItem(ctx echo.Context, param model.Search) ([]model.Item, error)
 	GetMyItem(ctx echo.Context, userID int64) ([]model.Item, error)
 	GetItemByID(ctx echo.Context, itemID int64) (model.Item, error)
 	CreateItem(ctx echo.Context, item model.RequestCreateItem) error

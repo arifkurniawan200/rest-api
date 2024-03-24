@@ -3,7 +3,9 @@ package items
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/labstack/echo/v4"
+	"strings"
 	"template/internal/model"
 	"template/internal/repository"
 	"time"
@@ -71,16 +73,57 @@ func (i ItemsHandler) GetMyItem(ctx echo.Context, userID int64) ([]model.Item, e
 	return data, nil
 }
 
-func (i ItemsHandler) GetListPublicItem(ctx echo.Context) ([]model.Item, error) {
+func (i ItemsHandler) GetListPublicItem(ctx echo.Context, param model.Search) ([]model.Item, error) {
 	var data []model.Item
 
 	ctxWithTimeout, cancel := context.WithTimeout(ctx.Request().Context(), 5*time.Second)
 	defer cancel()
 
-	rows, err := i.db.QueryContext(ctxWithTimeout, getListItem)
-	if err != nil {
-		return nil, err
+	query := getListItem
+	condition := []string{}
+	values := []interface{}{}
+	where := ""
+
+	if param.Rating != 0 {
+		condition = append(condition, "rating = ?")
+		values = append(values, param.Rating)
 	}
+	if param.Category != "" {
+		condition = append(condition, "category = ?")
+		values = append(values, param.Category)
+	}
+	if param.Reputation != 0 {
+		condition = append(condition, "reputation = ?")
+		values = append(values, param.Reputation)
+	}
+	if param.Availability != 0 {
+		condition = append(condition, "availability = ?")
+		values = append(values, param.Rating)
+	}
+
+	if len(condition) > 0 {
+
+		for i, x := range condition {
+			condition[i] = strings.Replace(x, "?", fmt.Sprintf("$%v", i+1), -1)
+		}
+		where = strings.Join(condition, " AND ")
+		query = query + "WHERE " + where
+	}
+	var rows *sql.Rows
+	var err error
+
+	if len(condition) > 0 {
+		rows, err = i.db.QueryContext(ctxWithTimeout, query, values...)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		rows, err = i.db.QueryContext(ctxWithTimeout, query)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	defer rows.Close()
 
 	for rows.Next() {

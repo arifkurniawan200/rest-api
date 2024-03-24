@@ -23,3 +23,10 @@ type RequestCreateItem struct {
 	UserID       int64  `json:"-"`
 	Value        string `json:"-"`
 }
+
+type Search struct {
+	Rating       int    `json:"rating"`
+	Category     string `json:"category"`
+	Reputation   int    `json:"reputation"`
+	Availability int    `json:"availability"`
+}

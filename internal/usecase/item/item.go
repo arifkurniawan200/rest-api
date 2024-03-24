@@ -34,8 +34,8 @@ func (i ItemHandler) GetMyItem(ctx echo.Context, userID int64) ([]model.Item, er
 	return i.i.GetMyItem(ctx, userID)
 }
 
-func (i ItemHandler) GetMarketItem(ctx echo.Context) ([]model.Item, error) {
-	return i.i.GetListPublicItem(ctx)
+func (i ItemHandler) GetMarketItem(ctx echo.Context, param model.Search) ([]model.Item, error) {
+	return i.i.GetListPublicItem(ctx, param)
 }
 
 func NewItemUsecase(t repository.TransactionRepository, u repository.UserRepository, h repository.HistoryRepository, i repository.ItemRepository) usecase.ItemUcase {
