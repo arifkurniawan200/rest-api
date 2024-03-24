@@ -23,6 +23,7 @@ func JWTMiddleware(secretKey string) echo.MiddlewareFunc {
 			parts := strings.Split(authHeader, " ")
 			if len(parts) != 2 || parts[0] != "Bearer" {
 				return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+					"status":  401,
 					"message": "Invalid authorization format",
 				})
 			}
@@ -32,7 +33,6 @@ func JWTMiddleware(secretKey string) echo.MiddlewareFunc {
 
 			// Parse and validate the token
 			token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-				// Check the signing method
 				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 					return nil, fmt.Errorf("Invalid signing method")
 				}
@@ -41,6 +41,7 @@ func JWTMiddleware(secretKey string) echo.MiddlewareFunc {
 
 			if err != nil || !token.Valid {
 				return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+					"status":  401,
 					"message": "Invalid token",
 				})
 			}
@@ -48,12 +49,13 @@ func JWTMiddleware(secretKey string) echo.MiddlewareFunc {
 			claims, ok := token.Claims.(jwt.MapClaims)
 			if !ok {
 				return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+					"status":  401,
 					"message": "Failed to parse claims",
 				})
 			}
 
 			// Store the claims in the context for later use
-			c.Set("claims", claims)
+			c.Set("auth", claims)
 
 			return next(c)
 		}
@@ -75,11 +77,22 @@ func AdminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		isAdmin, ok := claims["is_admin"].(bool)
 		if !ok || !isAdmin {
 			return c.JSON(http.StatusForbidden, map[string]interface{}{
-				"message": "Access denied. User is not an admin",
+				"message": "Access denied, only admin allowed to access this menu",
 			})
 		}
 
 		// If the user is an admin, proceed to the next middleware or handler
+		return next(c)
+	}
+}
+
+// onlyJSONMiddleware check content type, only application json allowed
+func onlyJSONMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		contentType := c.Request().Header.Get("Content-Type")
+		if contentType != "application/json" && c.Request().Method == "POST" {
+			return c.JSON(http.StatusUnsupportedMediaType, map[string]string{"error": "Only application/json content type is allowed"})
+		}
 		return next(c)
 	}
 }

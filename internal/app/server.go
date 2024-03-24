@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"errors"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"log"
@@ -17,19 +18,22 @@ import (
 type handler struct {
 	User        usecase.UserUcase
 	Transaction usecase.TransactionUcase
+	Items       usecase.ItemUcase
+	Cfg         config.Config
 }
 
 var cv = NewCustomValidator()
 
-func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
+func Run(u usecase.UserUcase, t usecase.TransactionUcase, i usecase.ItemUcase) {
 	e := echo.New()
+	cfg := config.ReadConfig()
 
 	h := handler{
 		User:        u,
 		Transaction: t,
+		Items:       i,
+		Cfg:         cfg,
 	}
-
-	cfg := config.ReadConfig()
 
 	// Middleware
 	e.Use(middleware.Logger())
@@ -60,12 +64,13 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
 		},
 	}
 
+	// set versioning v1
 	v1 := e.Group("/v1")
 	v1.Use(middleware.RateLimiterWithConfig(rateLimiterConfig))
+	v1.Use(onlyJSONMiddleware)
+
 	v1.POST("/register", h.RegisterUser)
 	v1.POST("/login", h.LoginUser)
-
-	// set versioning v1
 
 	user := v1.Group("/user")
 	{
@@ -75,6 +80,7 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
 	item := v1.Group("/items")
 	{
 		item.Use(JWTMiddleware(cfg.Env.SecretKey))
+		item.GET("/market", h.ListItems)
 	}
 
 	admin := v1.Group("/admin")
@@ -89,7 +95,7 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase) {
 
 	go func() {
 
-		if err := e.Start(":8080"); err != nil && err != http.ErrServerClosed {
+		if err := e.Start(":8080"); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Printf("Error starting server: %v\n", err)
 			os.Exit(1)
 		}
