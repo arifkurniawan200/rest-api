@@ -55,8 +55,7 @@ func JWTMiddleware(secretKey string) echo.MiddlewareFunc {
 			}
 
 			// Store the claims in the context for later use
-			c.Set("auth", claims)
-
+			c.Set("userAuth", claims)
 			return next(c)
 		}
 	}

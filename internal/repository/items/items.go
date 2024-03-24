@@ -13,6 +13,14 @@ type ItemsHandler struct {
 	db *sql.DB
 }
 
+func (i ItemsHandler) CreateItem(ctx echo.Context, item model.RequestCreateItem) error {
+	_, err := i.db.Exec(insertNewItem, item.Name, item.Rating, item.Category, item.ImageURL, item.Reputation, item.Price, item.Availability, item.Value)
+	if err != nil {
+		return err
+	}
+	return err
+}
+
 func (i ItemsHandler) GetItemByID(ctx echo.Context, itemID int64) (model.Item, error) {
 	var data model.Item
 
@@ -26,7 +34,7 @@ func (i ItemsHandler) GetItemByID(ctx echo.Context, itemID int64) (model.Item, e
 	defer rows.Close()
 
 	for rows.Next() {
-		if err := rows.Scan(&data.ID, &data.Name, &data.Rating, &data.Category, &data.ImageURL, &data.Reputation, &data.Price, &data.Availability); err != nil {
+		if err := rows.Scan(&data.ID, &data.Name, &data.Rating, &data.Category, &data.ImageURL, &data.Reputation, &data.Price, &data.Availability, &data.Value); err != nil {
 			return data, err
 		}
 	}
@@ -51,7 +59,7 @@ func (i ItemsHandler) GetMyItem(ctx echo.Context, userID int64) ([]model.Item, e
 
 	for rows.Next() {
 		var t model.Item
-		if err := rows.Scan(&t.ID, &t.Name, &t.Rating, &t.Category, &t.ImageURL, &t.Reputation, &t.Price, &t.Availability); err != nil {
+		if err := rows.Scan(&t.ID, &t.Name, &t.Rating, &t.Category, &t.ImageURL, &t.Reputation, &t.Price, &t.Availability, &t.Value); err != nil {
 			return nil, err
 		}
 		data = append(data, t)
@@ -77,7 +85,7 @@ func (i ItemsHandler) GetListPublicItem(ctx echo.Context) ([]model.Item, error) 
 
 	for rows.Next() {
 		var t model.Item
-		if err := rows.Scan(&t.ID, &t.Name, &t.Rating, &t.Category, &t.ImageURL, &t.Reputation, &t.Price, &t.Availability); err != nil {
+		if err := rows.Scan(&t.ID, &t.Name, &t.Rating, &t.Category, &t.ImageURL, &t.Reputation, &t.Price, &t.Availability, &t.Value); err != nil {
 			return nil, err
 		}
 		data = append(data, t)

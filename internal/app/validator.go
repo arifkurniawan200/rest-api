@@ -6,6 +6,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/sync/errgroup"
+	"strconv"
 	"strings"
 )
 
@@ -28,6 +29,11 @@ func NewCustomValidator() *CustomValidator {
 
 	g.Go(func() error {
 		err = v.RegisterValidation("checkCategory", allowedCategory)
+		return err
+	})
+
+	g.Go(func() error {
+		err = v.RegisterValidation("inRange", inRange)
 		return err
 	})
 
@@ -66,11 +72,34 @@ func allowedCategory(fl validator.FieldLevel) bool {
 	invalidWords := []string{"photo", "sketch", "cartoon", "animation"}
 
 	for _, word := range invalidWords {
-		if !strings.EqualFold(value, word) {
-			return false
+		if strings.EqualFold(value, word) {
+			return true
 		}
 	}
-	return true
+	return false
+}
+
+func inRange(fl validator.FieldLevel) bool {
+	param := fl.Param()
+	params := strings.Split(param, "-")
+
+	if len(params) != 2 {
+		return false
+	}
+
+	v1, err := strconv.ParseInt(params[0], 10, 64)
+	if err != nil {
+		return false
+	}
+
+	v2, err := strconv.ParseInt(params[1], 10, 64)
+	if err != nil {
+		return false
+	}
+
+	value := fl.Field().Int()
+
+	return value >= v1 && value <= v2
 }
 
 func _FormatValidationError(err error) []string {
@@ -91,6 +120,15 @@ func _FormatValidationError(err error) []string {
 			messages = append(messages, fmt.Sprintf("%s must be greater than %s character (minimum %s char)", err.Field(), err.Param(), err.Param()))
 		case "max":
 			messages = append(messages, fmt.Sprintf("%s must be less than %s character (maximum %s char)", err.Field(), err.Param(), err.Param()))
+		case "inRange":
+			param := err.Param()
+			params := strings.Split(param, "-")
+			if len(params) != 2 {
+				continue
+			}
+			v1, _ := strconv.ParseInt(params[0], 10, 64)
+			v2, _ := strconv.ParseInt(params[1], 10, 64)
+			messages = append(messages, fmt.Sprintf("%s must be less than %v and greater than %v", err.Field(), v2, v1))
 		default:
 			messages = append(messages, fmt.Sprintf("%s is invalid", err.Field()))
 		}

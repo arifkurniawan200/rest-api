@@ -9,4 +9,17 @@ type Item struct {
 	Reputation   int    `json:"reputation" db:"reputation"`
 	Price        int    `json:"price" db:"price"`
 	Availability int    `json:"availability" db:"availability"`
+	Value        string `json:"value" db:"value"`
+}
+
+type RequestCreateItem struct {
+	Name         string `json:"name"  validate:"required,blacklistWords,min=10"`
+	Rating       int    `json:"rating"  validate:"required,inRange=0-5"`
+	Category     string `json:"category"  validate:"required,checkCategory"`
+	ImageURL     string `json:"image_url"  validate:"required,url"`
+	Reputation   int    `json:"reputation"  validate:"required,inRange=0-1000"`
+	Price        int    `json:"price"  validate:"required"`
+	Availability int    `json:"availability"  validate:"required"`
+	UserID       int64  `json:"-"`
+	Value        string `json:"-"`
 }

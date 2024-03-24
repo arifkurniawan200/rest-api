@@ -14,6 +14,18 @@ type ItemHandler struct {
 	i repository.ItemRepository
 }
 
+func (i ItemHandler) AddItem(ctx echo.Context, item model.RequestCreateItem) error {
+	switch {
+	case item.Reputation <= 500:
+		item.Value = "red"
+	case item.Reputation <= 799:
+		item.Value = "yellow"
+	default:
+		item.Value = "green"
+	}
+	return i.i.CreateItem(ctx, item)
+}
+
 func (i ItemHandler) GetItemByItemID(ctx echo.Context, itemID int64) (model.Item, error) {
 	return i.i.GetItemByID(ctx, itemID)
 }

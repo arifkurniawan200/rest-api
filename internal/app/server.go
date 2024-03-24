@@ -81,6 +81,9 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase, i usecase.ItemUcase) {
 	{
 		item.Use(JWTMiddleware(cfg.Env.SecretKey))
 		item.GET("/market", h.ListItems)
+		item.GET("/me", h.ListMyItems)
+		item.GET("", h.GetItemsByID)
+		item.POST("", h.AddItem)
 	}
 
 	admin := v1.Group("/admin")

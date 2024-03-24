@@ -17,4 +17,5 @@ type ItemUcase interface {
 	GetMarketItem(ctx echo.Context) ([]model.Item, error)
 	GetMyItem(ctx echo.Context, userID int64) ([]model.Item, error)
 	GetItemByItemID(ctx echo.Context, itemID int64) (model.Item, error)
+	AddItem(ctx echo.Context, item model.RequestCreateItem) error
 }
