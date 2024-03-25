@@ -25,13 +25,13 @@ func (i ItemsHandler) UpdateItem(ctx echo.Context, item model.RequestCreateItem,
 
 	// check if using transaction
 	if tx != nil {
-		_, err = tx.ExecContext(ctxWithTimeout, updateItembyID, item.Name, item.Rating, item.Category, item.ImageURL, item.Reputation, item.Price, item.Availability, item.Value, item.ID)
+		_, err = tx.ExecContext(ctxWithTimeout, updateItembyID, item.Name, item.Rating, item.Category, item.ImageURL, item.Reputation, item.Price, item.Availability, item.Value, item.IsActive, item.ID)
 		if err != nil {
 			return err
 		}
 	} else {
 		// using existing database from dependencies injection
-		_, err = i.db.ExecContext(ctxWithTimeout, geItemByID, item.Name, item.Rating, item.Category, item.ImageURL, item.Reputation, item.Price, item.Availability, item.Value, item.ID)
+		_, err = i.db.ExecContext(ctxWithTimeout, updateItembyID, item.Name, item.Rating, item.Category, item.ImageURL, item.Reputation, item.Price, item.Availability, item.Value, item.IsActive, item.ID)
 		if err != nil {
 			return err
 		}

@@ -25,6 +25,7 @@ type RequestCreateItem struct {
 	UserID       int64  `json:"-"`
 	Value        string `json:"-"`
 	ID           int    `json:"-"`
+	IsActive     bool   `json:"is_active"`
 }
 
 func (i *RequestCreateItem) GetReputationBadge() {

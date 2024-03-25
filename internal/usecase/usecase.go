@@ -19,4 +19,5 @@ type ItemUcase interface {
 	GetItemByItemID(ctx echo.Context, itemID int64) (model.Item, error)
 	AddItem(ctx echo.Context, item model.RequestCreateItem) error
 	UpdateItem(ctx echo.Context, item model.RequestCreateItem) error
+	DeleteItem(ctx echo.Context, userID, itemID int64) error
 }

@@ -225,3 +225,50 @@ func (u handler) UpdateItem(c echo.Context) error {
 		Messages: "success update item",
 	})
 }
+
+func (u handler) DeleteItem(c echo.Context) error {
+	var (
+		err error
+	)
+
+	reqID := c.QueryParam("id")
+	if reqID == "" {
+		return c.JSON(http.StatusBadRequest, ResponseFailed{
+			Status:   http.StatusBadRequest,
+			Messages: "failed to delete item",
+			Error:    "param id is required",
+		})
+	}
+
+	auth, err := utils.GetSession(c)
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, ResponseFailed{
+			Status:   http.StatusUnauthorized,
+			Messages: "invalid token",
+			Error:    "access token is invalid or expired",
+		})
+	}
+
+	userId, ok := auth["id"].(float64)
+	if !ok {
+		return c.JSON(http.StatusInternalServerError, ResponseFailed{
+			Status:   http.StatusInternalServerError,
+			Messages: "internal server error",
+			Error:    "failed to get user id",
+		})
+	}
+
+	itemID, _ := strconv.Atoi(reqID)
+
+	err = u.Items.DeleteItem(c, int64(userId), int64(itemID))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ResponseFailed{
+			Status:   http.StatusInternalServerError,
+			Messages: "failed to delete item",
+			Error:    err.Error(),
+		})
+	}
+	return c.JSON(http.StatusCreated, ResponseSuccess{
+		Messages: "success delete item",
+	})
+}

@@ -22,8 +22,9 @@ SET name = $1,
     reputation = $5,
     price = $6,
     availability = $7,
-    value = $8
-WHERE id = $9;
+    value = $8,
+    is_active = $9
+WHERE id = $10;
 `
 
 	saveHistoryChanges = `

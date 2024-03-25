@@ -17,6 +17,75 @@ type ItemHandler struct {
 	i repository.ItemRepository
 }
 
+func (i ItemHandler) DeleteItem(ctx echo.Context, userID, itemID int64) error {
+	var (
+		err error
+	)
+
+	tx, err := i.u.BeginTx()
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+
+	dataBefore, err := i.i.GetItemByID(ctx, itemID, tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if dataBefore.ID == 0 {
+		err = fmt.Errorf("failed to get item")
+		tx.Rollback()
+		return err
+	}
+
+	dataAfter := model.RequestCreateItem{
+		ID:           int(itemID),
+		Name:         dataBefore.Name,
+		Rating:       dataBefore.Rating,
+		Category:     dataBefore.Category,
+		ImageURL:     dataBefore.ImageURL,
+		Reputation:   dataBefore.Reputation,
+		Price:        dataBefore.Price,
+		Availability: dataBefore.Availability,
+		UserID:       userID,
+		Value:        dataBefore.Value,
+		IsActive:     false,
+	}
+
+	err = i.i.UpdateItem(ctx, dataAfter, tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = i.h.SaveHistory(ctx, model.TableHistory{
+		TableName:  "items",
+		TableKey:   int(itemID),
+		DataBefore: dataBefore,
+		DataAfter:  dataAfter,
+		CreatedAt:  time.Now(),
+		UserID:     userID,
+	}, tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
 func (i ItemHandler) UpdateItem(ctx echo.Context, item model.RequestCreateItem) error {
 	var (
 		err error
@@ -31,21 +100,19 @@ func (i ItemHandler) UpdateItem(ctx echo.Context, item model.RequestCreateItem) 
 
 	defer func() {
 		if err != nil {
-			err := tx.Rollback()
-			if err != nil {
-				return
-			}
+			tx.Rollback()
 		}
 	}()
 
-	fmt.Println("PASS")
 	dataBefore, err := i.i.GetItemByID(ctx, int64(item.ID), tx)
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
 
 	err = i.i.UpdateItem(ctx, item, tx)
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
 
@@ -58,6 +125,7 @@ func (i ItemHandler) UpdateItem(ctx echo.Context, item model.RequestCreateItem) 
 		UserID:     item.UserID,
 	}, tx)
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
 
