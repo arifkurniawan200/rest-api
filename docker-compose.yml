@@ -1,18 +1,41 @@
-version: '3'
+version: '3.8'
 
 services:
-  redis:
-    image: redis
-    container_name: redis
-    ports:
-      - "6379:6379"
-
   postgres:
-    image: postgres
-    container_name: postgres
-    ports:
-      - "5432:5432"
+    image: postgres:latest
+    restart: always
     environment:
       POSTGRES_USER: smartm2m
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: data_server
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rest
+
+  redis:
+    image: redis:latest
+    restart: always
+    networks:
+      - rest
+
+  app:
+    build: .
+    depends_on:
+      - postgres
+      - redis
+    restart: always
+    environment:
+      DATABASE_URL: postgres://smartm2m:postgres@postgres:5432/data_server?sslmode=disable
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "8080:8080"
+    networks:
+      - rest
+
+networks:
+  rest:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,0 +1,1146 @@
+{
+	"info": {
+		"_postman_id": "dcd19b54-7724-4734-afda-b246d5bf0f01",
+		"name": "nft marketplace",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25502800"
+	},
+	"item": [
+		{
+			"name": "items",
+			"item": [
+				{
+					"name": "detail items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/v1/items?id=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"items"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK Detail Items With History Changes",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/v1/items?id=1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 23:43:20 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1152"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"messages\": \"success fetch item\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Product karafuru\",\n        \"rating\": 5,\n        \"category\": \"photo\",\n        \"image_url\": \"http://example.com/productA.jpg\",\n        \"reputation\": 1000,\n        \"price\": 500,\n        \"availability\": 10,\n        \"value\": \"green\",\n        \"is_active\": true,\n        \"history_changes\": [\n            {\n                \"id\": 1,\n                \"table_name\": \"items\",\n                \"table_key\": 1,\n                \"data_before\": {\n                    \"availability\": 10,\n                    \"category\": \"photo\",\n                    \"id\": 1,\n                    \"image_url\": \"http://example.com/productA.jpg\",\n                    \"name\": \"Product arif\",\n                    \"price\": 500,\n                    \"rating\": 4,\n                    \"reputation\": 100,\n                    \"value\": \"red\"\n                },\n                \"data_after\": {\n                    \"availability\": 10,\n                    \"category\": \"photo\",\n                    \"image_url\": \"http://example.com/productA.jpg\",\n                    \"name\": \"Product karafuru\",\n                    \"price\": 500,\n                    \"rating\": 5,\n                    \"reputation\": 1000\n                },\n                \"user_id\": 2,\n                \"created_at\": \"2024-03-25T05:58:57.097888Z\"\n            },\n            {\n                \"id\": 2,\n                \"table_name\": \"items\",\n                \"table_key\": 1,\n                \"data_before\": {\n                    \"availability\": 10,\n                    \"category\": \"photo\",\n                    \"id\": 1,\n                    \"image_url\": \"http://example.com/productA.jpg\",\n                    \"name\": \"Product karafuru\",\n                    \"price\": 500,\n                    \"rating\": 5,\n                    \"reputation\": 1000,\n                    \"value\": \"green\"\n                },\n                \"data_after\": {\n                    \"availability\": 10,\n                    \"category\": \"photo\",\n                    \"image_url\": \"http://example.com/productA.jpg\",\n                    \"name\": \"Product karafuru\",\n                    \"price\": 500,\n                    \"rating\": 5,\n                    \"reputation\": 1000\n                },\n                \"user_id\": 2,\n                \"created_at\": \"2024-03-25T06:00:57.874255Z\"\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "200 OK Without history changes",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/v1/items?id=2",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 23:43:47 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "256"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"messages\": \"success fetch item\",\n    \"data\": {\n        \"id\": 2,\n        \"name\": \"Product karafuru\",\n        \"rating\": 5,\n        \"category\": \"photo\",\n        \"image_url\": \"http://example.com/productA.jpg\",\n        \"reputation\": 1000,\n        \"price\": 500,\n        \"availability\": 10,\n        \"value\": \"green\",\n        \"is_active\": true,\n        \"history_changes\": null\n    }\n}"
+						},
+						{
+							"name": "404 Not Found Items",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/v1/items?id=4",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 23:44:33 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "54"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 404,\n    \"messages\": \"not found item\",\n    \"error\": {}\n}"
+						}
+					]
+				},
+				{
+					"name": "list nft in market",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 4\n}\n\n// example param for searcing\n// {\n//     \"rating\": 4,\n//     \"category\": \"Electronics\",\n//     \"reputation\": 100,\n//     \"availability\": 10\n// }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/v1/items/market",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"items",
+								"market"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK without param",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/v1/items/market",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items",
+										"market"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 15:07:01 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "216"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"messages\": \"success fetch item list\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Product arif\",\n            \"rating\": 4,\n            \"category\": \"photo\",\n            \"image_url\": \"http://example.com/productA.jpg\",\n            \"reputation\": 100,\n            \"price\": 500,\n            \"availability\": 10,\n            \"value\": \"red\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "200 OK with param search",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"rating\": 4\n}\n\n// example param for searcing\n// {\n//     \"rating\": 4,\n//     \"category\": \"Electronics\",\n//     \"reputation\": 100,\n//     \"availability\": 10\n// }\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items/market",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items",
+										"market"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 22:43:18 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "216"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"messages\": \"success fetch item list\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Product arif\",\n            \"rating\": 4,\n            \"category\": \"photo\",\n            \"image_url\": \"http://example.com/productA.jpg\",\n            \"reputation\": 100,\n            \"price\": 500,\n            \"availability\": 10,\n            \"value\": \"red\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "create new item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Product arif\",\n    \"rating\": 4,\n    \"category\": \"photo\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 100,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/v1/items",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"items"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "400 Bad Request Contains Sex word",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Product asex\",\n    \"rating\": 4,\n    \"category\": \"photo\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 100,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 22:44:17 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "105"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 400,\n    \"messages\": \"Validation Error\",\n    \"error\": [\n        \"Name must not contain words sex, gay or lesbian\"\n    ]\n}"
+						},
+						{
+							"name": "400 Bad Request Invalid category",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Product gambar \",\n    \"rating\": 4,\n    \"category\": \"asal\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 100,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 22:44:57 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "125"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 400,\n    \"messages\": \"Validation Error\",\n    \"error\": [\n        \"Category allowed categories are photo, sketch, cartoon or animation\"\n    ]\n}"
+						},
+						{
+							"name": "400 Bad Request Invalid URL",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Product gambar karafuru\",\n    \"rating\": 4,\n    \"category\": \"photo\",\n    \"image_url\": \"aa\",\n    \"reputation\": 100,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 22:45:53 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "85"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 400,\n    \"messages\": \"Validation Error\",\n    \"error\": [\n        \"ImageURL is not a valid URL\"\n    ]\n}"
+						},
+						{
+							"name": "400 Bad Request Invalid value rating",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Product karafuru\",\n    \"rating\": 10,\n    \"category\": \"photo\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 100,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 22:46:24 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "103"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 400,\n    \"messages\": \"Validation Error\",\n    \"error\": [\n        \"Rating must be less than 5 and greater than 0\"\n    ]\n}"
+						},
+						{
+							"name": "400 Bad Request Invalid value reputation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Product karafuru\",\n    \"rating\": 5,\n    \"category\": \"photo\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 10000,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 22:47:02 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "110"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 400,\n    \"messages\": \"Validation Error\",\n    \"error\": [\n        \"Reputation must be less than 1000 and greater than 0\"\n    ]\n}"
+						},
+						{
+							"name": "200 Ok Success Add Item",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Product karafuru\",\n    \"rating\": 5,\n    \"category\": \"photo\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 1000,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 22:51:54 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"messages\": \"success add item\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Buy items",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"item_id\": 5,\n  \"transaction_type\": \"purchase\",\n  \"quantity\": 3,\n  \"total_price\": 1500\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/v1/items/buy",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"items",
+								"buy"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "500 failed purchase",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": 1,\n  \"item_id\": 4,\n  \"transaction_type\": \"purchase\",\n  \"quantity\": 3,\n  \"total_price\": 150\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items/buy",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items",
+										"buy"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 25 Mar 2024 00:57:54 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "83"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 500,\n    \"messages\": \"failed to add item\",\n    \"error\": \"not found items with id 4\"\n}"
+						},
+						{
+							"name": "500 not equal price",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"item_id\": 5,\n  \"transaction_type\": \"purchase\",\n  \"quantity\": 3,\n  \"total_price\": 150\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items/buy",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items",
+										"buy"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 25 Mar 2024 01:01:17 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "114"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 500,\n    \"messages\": \"failed to add item\",\n    \"error\": \"total price not matched, should equal with current price\"\n}"
+						},
+						{
+							"name": "500 quantity greater than availablility",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"item_id\": 5,\n  \"transaction_type\": \"purchase\",\n  \"quantity\": 3000,\n  \"total_price\": 1500\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items/buy",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items",
+										"buy"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 25 Mar 2024 01:02:07 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "100"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 500,\n    \"messages\": \"failed to add item\",\n    \"error\": \"quantity is greater than avilability items\"\n}"
+						}
+					]
+				},
+				{
+					"name": "update items",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Product karafuru\",\n    \"rating\": 5,\n    \"category\": \"photo\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 1000,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/v1/items?id=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"items"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "400 Bad Request Param is missing",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Product karafuru\",\n    \"rating\": 5,\n    \"category\": \"photo\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 1000,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 22:50:41 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 400,\n    \"messages\": \"failed to update item\",\n    \"error\": \"param id is required\"\n}"
+						}
+					]
+				},
+				{
+					"name": "delete items",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Product karafuru\",\n    \"rating\": 5,\n    \"category\": \"photo\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 1000,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/v1/items?id=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"items"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "400 Bad Request Param is missing",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Product karafuru\",\n    \"rating\": 5,\n    \"category\": \"photo\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 1000,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Mar 2024 22:50:41 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 400,\n    \"messages\": \"failed to update item\",\n    \"error\": \"param id is required\"\n}"
+						},
+						{
+							"name": "200 Success delete",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Product karafuru\",\n    \"rating\": 5,\n    \"category\": \"photo\",\n    \"image_url\": \"http://example.com/productA.jpg\",\n    \"reputation\": 1000,\n    \"price\": 500,\n    \"availability\": 10\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/items?id=4",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"items"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 25 Mar 2024 00:10:14 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "35"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"messages\": \"success delete item\"\n}"
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpZCI6MiwiZXhwIjoxNzExMzMxMjg3fQ.En1B95n06i-R1DbCICxn6KBTXQNJ2kw5n91P34hi-as",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
