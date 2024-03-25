@@ -11,6 +11,7 @@ type UserUcase interface {
 }
 
 type TransactionUcase interface {
+	Purchase(ctx echo.Context, transaction model.RequestTransaction) error
 }
 
 type ItemUcase interface {

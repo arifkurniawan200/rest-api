@@ -13,6 +13,7 @@ type UserRepository interface {
 }
 
 type TransactionRepository interface {
+	Purchase(ctx echo.Context, transaction model.RequestTransaction, tx *sql.Tx) error
 }
 
 type ItemRepository interface {

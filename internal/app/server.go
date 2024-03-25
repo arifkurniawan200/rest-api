@@ -86,6 +86,7 @@ func Run(u usecase.UserUcase, t usecase.TransactionUcase, i usecase.ItemUcase) {
 		item.POST("", h.AddItem)
 		item.PUT("", h.UpdateItem)
 		item.DELETE("", h.DeleteItem)
+		item.POST("/buy", h.BuyItem)
 	}
 
 	admin := v1.Group("/admin")

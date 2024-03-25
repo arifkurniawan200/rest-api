@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"template/internal/model"
 	"template/internal/utils"
+	"time"
 )
 
 func (u handler) ListItems(c echo.Context) error {
@@ -270,5 +271,61 @@ func (u handler) DeleteItem(c echo.Context) error {
 	}
 	return c.JSON(http.StatusCreated, ResponseSuccess{
 		Messages: "success delete item",
+	})
+}
+
+func (u handler) BuyItem(c echo.Context) error {
+	var (
+		transaction = new(model.RequestTransaction)
+		err         error
+	)
+
+	if err := c.Bind(transaction); err != nil {
+		return c.JSON(http.StatusInternalServerError, ResponseFailed{
+			Status:   http.StatusInternalServerError,
+			Messages: "failed to buy item",
+			Error:    err.Error(),
+		})
+	}
+
+	if err = cv.Validate(c, transaction); err != nil {
+		errorResponse := ResponseFailed{
+			Messages: "Validation Error",
+			Status:   http.StatusBadRequest,
+			Error:    _FormatValidationError(err),
+		}
+		return c.JSON(http.StatusBadRequest, errorResponse)
+	}
+
+	auth, err := utils.GetSession(c)
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, ResponseFailed{
+			Status:   http.StatusUnauthorized,
+			Messages: "invalid token",
+			Error:    "access token is invalid or expired",
+		})
+	}
+
+	id, ok := auth["id"].(float64)
+	if !ok {
+		return c.JSON(http.StatusInternalServerError, ResponseFailed{
+			Status:   http.StatusInternalServerError,
+			Messages: "internal server error",
+			Error:    "failed to get user id",
+		})
+	}
+	transaction.UserID = int(id)
+	transaction.TransactionDate = time.Now()
+
+	err = u.Transaction.Purchase(c, *transaction)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ResponseFailed{
+			Status:   http.StatusInternalServerError,
+			Messages: "failed to buy item",
+			Error:    err.Error(),
+		})
+	}
+	return c.JSON(http.StatusCreated, ResponseSuccess{
+		Messages: "success buy item",
 	})
 }
