@@ -1,0 +1,52 @@
+# Secret Scanner Demo Project
+# .gitignore — JANGAN PERNAH COMMIT .env atau file secret lainnya!
+
+# === ENVIRONMENT ===
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.staging
+
+# === KEYS & SECRETS ===
+*.pem
+*.key
+*-private.*
+secrets.json
+credentials.json
+service-account.json
+credentials/*.json
+
+# === POSTMAN COLLECTIONS (may contain tokens/sensitive data) ===
+*.postman_collection.json
+
+# === IDE ===
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# === BUILD ===
+node_modules/
+dist/
+build/
+.next/
+out/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === LOGS ===
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === DEPENDENCIES ===
+vendor/
+__pycache__/
+*.pyc
+*.pyo
